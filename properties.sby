@@ -5,10 +5,10 @@ mode prove
 smtbmc
 
 [script]
-read -formal wrapper.v rest of your source files.v
-prep -top wrapped_project
+read -formal wrapper.v chacha_wb_accel.v
+prep -top wrapped_chacha_wb_accel
 
 [files]
 wrapper.v
 properties.v
-rest of your source files.v
+chacha_wb_accel/chacha_wb_accel.v

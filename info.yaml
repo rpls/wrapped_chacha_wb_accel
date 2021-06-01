@@ -1,25 +1,25 @@
 --- 
 # information
 project: 
-  title: "title"
-  description: "description"
-  picture: docs/empty.png
-  author: "Author"
-  github: https://github.com/link
+  title: "ChaCha20 Accelerator"
+  description: "A minimal Wishbone connected ChaCha20 accelerator"
+  picture: docs/core.png
+  author: "Richard Petri"
+  github: https://github.com/rpls/wrapped_chacha_wb_accel
   license: LICENSE
 
 # test within caravel
 caravel_test:
   recipe: "coco_test"
-  directory: "caravel_test"
-  id: 1
-  module_name: "wrapped_project"
-  instance_name: "wrapped_project"
+  directory: "caravel_chacha_wb_accel"
+  id: 9
+  module_name: "wrapped_chacha_wb_accel"
+  instance_name: "wrapped_chacha_wb_accel"
 
 # module test
 module_test:
   recipe: "all" 
-  directory: "project directory"
+  directory: "chacha_wb_accel"
   makefile: "Makefile"
 
 # run the wrapper formal proof
@@ -34,11 +34,11 @@ openlane:
 # source required for various configs and module instantiation
 source:
     - wrapper.v
-    - other source files here
+    - chacha_wb_accel/chacha_wb_accel.v
 
 # gds - check size = 300x300, nothing on metal 5, do a DRC, check 141 tristate buffers, check LVS
 gds:
   directory: "gds"
-  gds_filename: "project.gds"
-  lvs_filename: "project.lvs.powered.v"
-  lef_filename: "project.lef"
+  gds_filename: "wrapped_chacha_wb_accel.gds"
+  lvs_filename: "wrapped_chacha_wb_accel.lvs.powered.v"
+  lef_filename: "wrapped_chacha_wb_accel.lef"

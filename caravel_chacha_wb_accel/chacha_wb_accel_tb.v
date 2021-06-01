@@ -21,10 +21,10 @@
 `include "caravel_netlists.v"
 `include "spiflash.v"
 
-module project_tb;
+module chacha_wb_accel_tb;
     initial begin
-        $dumpfile ("project.vcd");
-        $dumpvars (0, project_tb);
+        $dumpfile ("chacha_wb_accel.fst");
+        $dumpvars (0, chacha_wb_accel_tb);
         #1;
     end
 
@@ -37,7 +37,8 @@ module project_tb;
     wire [37:0] mprj_io;
 
     ///// convenience signals that match what the cocotb test modules are looking for
-
+    wire soc_txd;
+    assign soc_txd = mprj_io[6];
 
     /////
 
@@ -79,7 +80,7 @@ module project_tb;
 	);
 
 	spiflash #(
-		.FILENAME("project.hex")
+		.FILENAME("chacha_wb_accel.hex")
 	) spiflash (
 		.csb(flash_csb),
 		.clk(flash_clk),

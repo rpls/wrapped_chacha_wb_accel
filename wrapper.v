@@ -3,7 +3,7 @@
     `define MPRJ_IO_PADS 38    
 `endif
 // update this to the name of your module
-module wrapped_project(
+module wrapped_chacha_wb_accel(
 `ifdef USE_POWER_PINS
     inout vdda1,	// User area 1 3.3V supply
     inout vdda2,	// User area 2 3.3V supply
@@ -73,10 +73,18 @@ module wrapped_project(
 
     // permanently set oeb so that outputs are always enabled: 0 is output, 1 is high-impedance
     assign buf_io_oeb = {`MPRJ_IO_PADS{1'b0}};
+    assign buf_la_data_out[0] = active;
 
-    // Instantiate your module here, 
-    // connecting what you need of the above signals. 
-    // Use the buffered outputs for your module's outputs.
-
+    chacha_wb_accel accel(.clk(wb_clk_i),
+                          .reset(wb_rst_i),
+                          .wb_CYC(wbs_cyc_i),
+                          .wb_ADR(wbs_adr_i[5:2]),
+                          .wb_WE(wbs_we_i),
+                          .wb_STB(wbs_stb_i),
+                          .wb_ACK(buf_wbs_ack_o),
+                          .wb_DAT_MISO(buf_wbs_dat_o),
+                          .wb_DAT_MOSI(wbs_dat_i),
+                          .interrupt(buf_irq[0])
+                          );
 endmodule 
 `default_nettype wire
