@@ -8,10 +8,10 @@ set ::env(DESIGN_NAME) wrapped_chacha_wb_accel
 set ::env(VERILOG_FILES) "$::env(DESIGN_DIR)/wrapper.v $::env(DESIGN_DIR)/chacha_wb_accel/chacha_wb_accel.v"
 
 # target density, change this if you can't get your design to fit
-set ::env(PL_TARGET_DENSITY) "0.54"
-set ::env(CELL_PAD) "2"
-set ::env(GLB_RT_MAX_DIODE_INS_ITERS) "10"
+set ::env(PL_TARGET_DENSITY) "0.5"
 set ::env(SYNTH_STRATEGY) "AREA 1"
+set ::env(CELL_PAD) "4"
+set ::env(DIODE_INSERTION_STRATEGY) "5"
 
 # set absolute size of the die to 300 x 300 um
 set ::env(DIE_AREA) "0 0 300 300"
@@ -21,7 +21,7 @@ set ::env(FP_SIZING) absolute
 set ::env(SYNTH_DEFINES) "MPRJ_IO_PADS=38"
 
 # clock period is ns
-set ::env(CLOCK_PERIOD) "10"
+set ::env(CLOCK_PERIOD) "25"
 set ::env(CLOCK_PORT) "wb_clk_i"
 
 # macro needs to work inside Caravel, so can't be core and can't use metal 5
