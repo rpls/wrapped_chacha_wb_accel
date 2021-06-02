@@ -12,6 +12,11 @@ is missing.
 
 ![Image of the core](docs/core.png)
 
+# Requirements
+
+- All the requirements for [multi project tools](https://github.com/mattvenn/multi_project_tools)
+- The [cocotb](https://github.com/cocotb/cocotb) testbenches additionally require the [cocotb-bus](https://github.com/cocotb/cocotb-bus) library. They also utilize the [cocotbext-uart](https://github.com/alexforencich/cocotbext-uart) and [cocotbext-wishbone extensions](https://github.com/wallento/cocotbext-wishbone), which I have included in this repository.
+
 # License
 
 This project is [licensed under Apache 2](LICENSE)
