@@ -74,7 +74,7 @@ void chacha_accel(uint32_t state[16])
     reg_chacha_data = state[i];
   }
   reg_chacha_status |= 0x1;
-  while(reg_chacha_status & 0x1 != 0x1) {}
+  while((reg_chacha_status & 0x1) != 0x1) {}
   for (int i = 0; i < 16; i++) {
     state[i] = reg_chacha_data;
   }
