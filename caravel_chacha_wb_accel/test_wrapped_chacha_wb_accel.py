@@ -6,28 +6,29 @@ from cocotbext.uart import UartSink
 
 import struct
 
-REF_OUT = [
-    0x77EADF2B, 0x25D46682, 0xE6FB163B, 0x58F29AAD,
-    0xAF78337D, 0xD03177EA, 0x3961148D, 0x3F4E137C,
-    0xC62831CD, 0x42B01CBB, 0xB846929E, 0xED41D511,
-    0xE88BE8AB, 0xAAC13170, 0x8680A967, 0xEF397287
-]
+REF_OUTPUT = bytes.fromhex(
+    r"""
+f798a189f195e66982105ffb640bb7757f579da31602fc93ec01ac56
+f85ac3c134a4547b733b46413042c9440049176905d3be59ea1c53f1
+5916155c2be8241a38008b9a26bc35941e2444177c8ade6689de9526
+4986d95889fb60e84629c9bd9a5acb1cc118be563eb9b3a4a472f82e
+09a7e778492b562ef7130e88dfe031c79db9d4f7c7a899151b9a4750
+32b63fc385245fe054e3dd5a97a5f576fe064025d3ce042c566ab2c5
+07b138db853e3d6959660996546cc9c4a6eafdc777c040d70eaf46f7
+6dad3979e5c5360c3317166a1c894c94a371876a94df7628fe4eaaf2
+ccb27d5aaae0ad7ad0f9d4b6ad3b54098746d4524d38407a6deb3ab7
+8fab78c9"""
+)
 
 async def get_output(dut):
     uart = UartSink(dut.soc_txd, 1000000)
     data = bytearray()
-    while len(data) < 64:
+    while len(data) < len(REF_OUTPUT):
         await uart.wait(10, 'ms')
         data.extend(await uart.read())
-        # if b'\n' in data:
-        #     pos = data.find('\n')
-        #     print(data[0:pos+1].decode('ascii'))
-        #     data = bytearray(data[pos:])
-    chacha_out = struct.unpack("<" + "I"*16, data)
-    print()
-    for i, out in enumerate(chacha_out):
-        print(f"0x{out:08X}u", end=", " if i > 4 and i % 4 else ",\n")
-    assert all(ref == out for ref, out in zip(REF_OUT, chacha_out))
+    for i, out in enumerate(data):
+        print(f"0x{out:02X}u", end=", " if i > 1 and i % 16 else ",\n")
+    assert all(ref == out for ref, out in zip(REF_OUTPUT, data))
 
 @cocotb.test()
 async def test_start(dut):

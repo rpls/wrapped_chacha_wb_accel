@@ -66,17 +66,33 @@ static void send_bytes(void* buf, unsigned len)
 #define TEST_BAUD 1000000
 
 #define reg_chacha_status (*(volatile uint32_t*)0x30000000)
-#define reg_chacha_data (*(volatile uint32_t*)0x30000004)
+#define reg_chacha_key (*(volatile uint32_t*)0x30000004)
+#define reg_chacha_iv (*(volatile uint32_t*)0x30000008)
+#define reg_chacha_cnt (*(volatile uint32_t*)0x3000000C)
+#define reg_chacha_ct (*(volatile uint32_t*)0x30000010)
 
-void chacha_accel(uint32_t state[16])
+void chacha_accel_config(const unsigned char key[32], const unsigned char iv[12], uint32_t counter)
 {
-  for (int i = 0; i < 16; i++) {
-    reg_chacha_data = state[i];
+  while((reg_chacha_status & 0x1) != 0x1);
+  if (key) {
+    for (int i = 0; i < 32; i+=4) {
+      reg_chacha_key = key[i] | (key[i+1] << 8) | (key[i+2] << 16) | (key[i+3] << 24);
+    }
   }
+  if (iv) {
+    for (int i = 0; i < 12; i+=4) {
+      reg_chacha_iv = iv[i] | (iv[i+1] << 8) | (iv[i+2] << 16) | (iv[i+3] << 24);
+    }
+  }
+  reg_chacha_cnt = counter;
   reg_chacha_status |= 0x1;
-  while((reg_chacha_status & 0x1) != 0x1) {}
-  for (int i = 0; i < 16; i++) {
-    state[i] = reg_chacha_data;
+}
+
+void chacha_accel_get(uint32_t* output, size_t num)
+{
+  for (int i = 0; i < num; i++) {
+    while((reg_chacha_status & 0x1) != 0x1);
+    output[i] = reg_chacha_ct;
   }
 }
 
@@ -111,11 +127,17 @@ void main()
 	while (reg_mprj_xfer == 1) {
 	}
 
-  uint32_t data[] = {
-    0xFF000000u, 0xFF000001u, 0xFF000002u, 0xFF000003u,
-    0xFF000004u, 0xFF000005u, 0xFF000006u, 0xFF000007u,
-    0xFF000008u, 0xFF000009u, 0xFF00000Au, 0xFF00000Bu,
-    0xFF00000Cu, 0xFF00000Du, 0xFF00000Eu, 0xFF00000Fu
+	const unsigned char key[] = {
+    0x00u, 0x01u, 0x02u, 0x03u, 0x04u, 0x05u, 0x06u, 0x07u,
+    0x08u, 0x09u, 0x0au, 0x0bu, 0x0cu, 0x0du, 0x0eu, 0x0fu,
+    0x10u, 0x11u, 0x12u, 0x13u, 0x14u, 0x15u, 0x16u, 0x17u,
+    0x18u, 0x19u, 0x1au, 0x1bu, 0x1cu, 0x1du, 0x1eu, 0x1fu,
+  };
+
+  const unsigned char iv[] = {
+    0x00u, 0x00u, 0x00u, 0x00u,
+    0x00u, 0x01u, 0x02u, 0x03u,
+    0x04u, 0x05u, 0x06u, 0x07u,
   };
 
 	// activate the project by setting the 1st bit of 2nd bank of LA - depends on the project ID
@@ -127,9 +149,12 @@ void main()
 	reg_la0_oenb = 1;
   while (reg_la0_data & 0x1 != 1);
 
-  chacha_accel(data);
-
-  send_bytes(data, sizeof(data));
+  chacha_accel_config(key, iv, 0);
+  for (int i = 0; i < 4; ++i) {
+    uint32_t data[16];
+    chacha_accel_get(data, 16);
+    send_bytes(data, sizeof(data));
+  }
 
 	// activate the project by setting the 1st bit of 2nd bank of LA - depends on the project ID
 	reg_la1_iena = 0; // input enable off
