@@ -12,6 +12,7 @@ set ::env(PL_TARGET_DENSITY) "0.69"
 set ::env(SYNTH_STRATEGY) "AREA 2"
 set ::env(CELL_PAD) "1"
 set ::env(DIODE_INSERTION_STRATEGY) "5"
+set ::env(PL_RESIZER_BUFFER_OUTPUT_PORTS) 0
 
 # set absolute size of the die to 300 x 300 um
 set ::env(DIE_AREA) "0 0 300 300"
