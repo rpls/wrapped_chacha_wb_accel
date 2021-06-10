@@ -8,7 +8,7 @@ set ::env(DESIGN_NAME) wrapped_chacha_wb_accel
 set ::env(VERILOG_FILES) "$::env(DESIGN_DIR)/wrapper.v $::env(DESIGN_DIR)/chacha_wb_accel/chacha_wb_accel.v"
 
 # target density, change this if you can't get your design to fit
-set ::env(PL_TARGET_DENSITY) "0.69"
+set ::env(PL_TARGET_DENSITY) "0.68"
 set ::env(SYNTH_STRATEGY) "AREA 2"
 set ::env(CELL_PAD) "1"
 set ::env(DIODE_INSERTION_STRATEGY) "5"
