@@ -54,6 +54,8 @@ coco_test: ${PATTERN}.hex
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) \
 	-I $(UPRJ_BEHAVIOURAL_MODELS)    -I $(UPRJ_RTL_PATH)
 	MODULE=test_wrapped_chacha_wb_accel vvp -M $$(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus sim_build/sim.vvp -fst
+	test -f results.xml
+	! grep failure results.xml
 
 %.vvp: %_tb.v %.hex
 ifeq ($(SIM),RTL)

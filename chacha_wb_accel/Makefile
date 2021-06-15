@@ -26,3 +26,10 @@ deploy: $(TOPLEVEL).v test_$(TOPLEVEL).py Makefile
 	fi
 	install -m644 -t $(WRAPPER_DIR) $^
 	sed -i -e "s/chacha_wb_accel/$(TOPLEVEL)/" $(WRAPPER_DIR)/Makefile
+
+all: check
+
+.PHONY: check
+check: sim
+	test -f results.xml
+	! grep failure results.xml
