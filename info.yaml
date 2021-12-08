@@ -5,9 +5,7 @@ project:
   description: "A minimal Wishbone connected ChaCha20 accelerator"
   picture: docs/core.png
   author: "Richard Petri"
-  github: https://github.com/rpls/wrapped_chacha_wb_accel
   license: LICENSE
-  waive_lvs: 'LVS fails with GDS based LVS and fakediodes'
 
 # test within caravel
 caravel_test:
