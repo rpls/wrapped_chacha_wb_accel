@@ -8,6 +8,7 @@ PLUSARGS += -fst
 COMPILE_ARGS += -I $(PDK_ROOT)/sky130A
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
+export LIBPYTHON_LOC=$(shell cocotb-config --libpython)
 
 $(TOPLEVEL)_lvs.v: $(TOPLEVEL).lvs.powered.v
 	echo "\`define UNIT_DELAY #1" > $@

@@ -54,7 +54,7 @@ async def test_start(dut):
     dut.RSTB <= 1
 
     # wait with a timeout for the project to become active
-    await with_timeout(RisingEdge(dut.uut.mprj.wrapped_chacha_wb_accel.active), 10, 'ms')
+    await with_timeout(RisingEdge(dut.uut.mprj.wrapped_chacha_wb_accel_9.active), 10, 'ms')
     reader = cocotb.fork(get_output(dut))
-    await with_timeout(FallingEdge(dut.uut.mprj.wrapped_chacha_wb_accel.active), 10, 'ms')
+    await with_timeout(FallingEdge(dut.uut.mprj.wrapped_chacha_wb_accel_9.active), 10, 'ms')
     reader.kill()
